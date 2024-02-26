@@ -39,7 +39,23 @@
         ],
 
     ];
-        
+
+    $form_sent = !empty($_GET);
+
+    if ($form_sent) {
+     
+        $filteredHotels = array_filter($hotels, function ($hotel) {
+            
+            $filterParking = $_GET['parking'];
+            $filterVote = $_GET['vote'];
+
+            return ($filterParking === '') && ($hotel['vote'] >= $filterVote) || 
+            ($hotel['parking'] == $filterParking) && ($hotel['vote'] >= $filterVote);
+        });
+    } else {
+        $filteredHotels = $hotels;
+    }
+    
 
 ?>
 
@@ -54,8 +70,27 @@
     <title>hotels</title>
 </head>
 <body>
+    
     <h1 class="text-center">HOTEL</h1>
     <div class="container">
+
+        <!-- form -->
+        <form method="GET" class="mb-4">
+            <div class="mb-3">
+                <label for="parkingFilter" class="form-label">Filter by Parking:</label>
+                <select class="form-select" id="parkingFilter" name="parking">
+                    <option value="">All</option>
+                    <option value="1">With Parking</option>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="voteFilter" class="form-label">Filter by Vote:</label>
+                <input type="number" class="form-control" id="voteFilter" name="vote" min="1" max="5">
+            </div>
+            <button type="submit" class="btn btn-primary">Filter</button>
+        </form>
+
+        <!-- table -->
         <table class="table table-bordered border-primary">
             <thead>
                 <tr>
@@ -67,13 +102,13 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($hotels as $hotel): ?>
+                <?php foreach ($filteredHotels as $hotel): ?>
                 <tr>
                     <td><?= $hotel['name'] ?></td>
                     <td><?= $hotel['description'] ?></td>
                     <td><?= $hotel['parking'] ? 'yes' : 'no' ?></td>
                     <td><?= $hotel['vote'] ?></td>
-                    <td><?= $hotel['distance_to_center'] ?></td>
+                    <td><?= $hotel['distance_to_center'] . ' km' ?></td>
                 </tr>
                 <?php endforeach; ?>
             </tbody>
