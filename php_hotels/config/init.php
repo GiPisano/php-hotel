@@ -2,18 +2,9 @@
 
     require_once __DIR__ . "/../data/hotels.php";
 
-    $form_sent = !empty($_GET);
+    $filter_parking = isset($_GET['parking']) ?? 'off';
+    $filter_vote = $_GET['vote'] ?? 'false';
 
-    if ($form_sent) {
-     
-        $filteredHotels = array_filter($hotels, function ($hotel) {
-            
-            $filterParking = $_GET['parking'];
-            $filterVote = $_GET['vote'];
+    if($filter_parking) $hotels = array_filter($hotels, fn($hotel) => $hotel['parking']);
 
-            return ($filterParking === '') && ($hotel['vote'] >= $filterVote) || 
-            ($hotel['parking'] == $filterParking) && ($hotel['vote'] >= $filterVote);
-        });
-    } else {
-        $filteredHotels = $hotels;
-    }
+    if($filter_vote) $hotels = array_filter($hotels, fn($hotel) => $hotel['vote'] >= $filter_vote);

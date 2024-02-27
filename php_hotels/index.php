@@ -23,14 +23,24 @@
         <form method="GET" class="mb-4">
             <div class="mb-3">
                 <label for="parkingFilter" class="form-label">Filter by Parking:</label>
-                <select class="form-select" id="parkingFilter" name="parking">
-                    <option value="">All</option>
-                    <option value="1">With Parking</option>
-                </select>
+                <input 
+                    class="form-check-input" 
+                    type="checkbox" 
+                    id="parkingFilter" 
+                    name="parking"
+                    <?= $filter_parking ? 'checked' : '' ?>  
+                >
             </div>
             <div class="mb-3">
                 <label for="voteFilter" class="form-label">Filter by Vote:</label>
-                <input type="number" class="form-control" id="voteFilter" name="vote" min="1" max="5">
+                <input 
+                    type="number" 
+                    class="form-control" 
+                    id="voteFilter" 
+                    name="vote" 
+                    min="1" max="5"
+                    value="<?= $filter_vote ?>"
+                >
             </div>
             <button type="submit" class="btn btn-primary">Filter</button>
         </form>
@@ -47,7 +57,7 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($filteredHotels as $hotel): ?>
+                <?php foreach ($hotels as $hotel): ?>
                 <tr>
                     <td><?= $hotel['name'] ?></td>
                     <td><?= $hotel['description'] ?></td>
@@ -63,6 +73,5 @@
     
 </body>
 </html>
-
 
 
